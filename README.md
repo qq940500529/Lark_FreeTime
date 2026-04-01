@@ -1,30 +1,58 @@
-# feishu_kongxianshijian
+# 飞书共同空闲时间查询机器人
 
-飞书机器人（Python）示例：
-- 被 @ 时接收消息事件
-- 刚收到消息先添加 `OneSecond` 表情回复
-- 查询消息内被 @ 成员（自动排除机器人）的共同空闲时间
-- 空闲条件：工作日 `08:30-17:00`，连续空闲不少于 `15` 分钟
-- 结果通过 `post` 富文本中的 `md` 标签返回，时段以代码块表格展示
-- 在“用户进入与机器人会话”“机器人进群”事件触发时发送查询指引
+[![Python](https://img.shields.io/badge/Python-3.10%2B-blue?logo=python&logoColor=white)](https://www.python.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Lark SDK](https://img.shields.io/badge/lark--oapi-%E2%89%A51.4.0-orange)](https://github.com/larksuite/oapi-sdk-python)
 
-## 目录结构
+> 飞书机器人：在群聊中 @机器人 + @成员，即可查询多人共同空闲时间，帮助团队高效安排会议。
 
-- `main.py`：长连接事件入口
-- `bot/config.py`：配置加载
-- `bot/feishu_client.py`：飞书 API 封装
-- `bot/scheduler.py`：共同空闲时间计算
+---
 
-## 环境准备
+## ✨ 功能特性
 
-1. Python 3.10+
-2. 安装依赖：
+- 📩 **消息触发** — 被 @ 时自动接收消息事件
+- ⏳ **即时反馈** — 收到消息先添加 `OneSecond` 表情，处理完成后替换为 `DONE`
+- 📅 **日历查询** — 查询消息内被 @ 成员（自动排除机器人）的日历忙碌信息
+- 🧮 **智能计算** — 基于"忙碌时间并集的补集"算法，计算多人共同空闲时段
+- 📊 **美观输出** — 结果以 Markdown 代码块表格形式展示
+- 📖 **使用引导** — 用户进入会话或机器人进群时自动发送查询指引
+
+## 📁 目录结构
+
+```
+feishu_kongxianshijian/
+├── main.py                 # 长连接事件入口
+├── bot/
+│   ├── __init__.py         # 包标记
+│   ├── config.py           # 配置加载
+│   ├── feishu_client.py    # 飞书 API 封装
+│   └── scheduler.py        # 共同空闲时间计算
+├── requirements.txt        # Python 依赖
+├── .env.example            # 环境变量模板
+└── .gitignore
+```
+
+## 🚀 快速开始
+
+### 1. 环境准备
+
+- Python **3.10** 或更高版本
+
+### 2. 安装依赖
 
 ```bash
 pip install -r requirements.txt
 ```
 
-3. 配置环境变量（已支持从 `.env` 读取）：
+### 3. 配置环境变量
+
+复制模板并编辑：
+
+```bash
+cp .env.example .env
+```
+
+填写以下内容（已支持从 `.env` 文件读取）：
 
 ```env
 FEISHU_APP_ID=你的应用ID
@@ -33,35 +61,42 @@ FEISHU_APP_SECRET=你的应用密钥
 FEISHU_BOT_OPEN_ID=ou_xxx
 ```
 
-可先复制模板文件再填写：
+### 4. 运行
 
 ```bash
-cp .env.example .env
+python main.py
 ```
 
-## 飞书后台配置
+## ⚙️ 飞书后台配置
 
-### 1) 开启能力
+### 开启能力
 
-- 开启机器人能力并发布版本
+- 开启 **机器人能力** 并发布版本
 
-### 1.1) 机器人名称建议
+### 机器人名称建议
 
-- 建议将机器人名称设置为：`共同空闲时间查询`
-- 原因：项目默认按该名称在被 @ 成员中识别并排除机器人自身
-- 若你使用其他名称，请同步修改 [main.py](main.py) 中的 `BOT_DISPLAY_NAME`
+| 配置项 | 建议值 |
+|-------|-------|
+| 机器人名称 | `共同空闲时间查询` |
 
-### 2) 订阅事件
+> **提示**：项目默认按该名称在被 @ 成员中识别并排除机器人自身。若使用其他名称，请同步修改 [main.py](main.py) 中的 `BOT_DISPLAY_NAME`。
 
-- 订阅：`im.message.receive_v1`（接收消息 v2.0）
-- 订阅：`im.chat.access_event.bot_p2p_chat_entered_v1`（用户进入与机器人会话）
-- 订阅：`im.chat.member.bot.added_v1`（机器人进群）
-- 推荐使用：长连接方式接收事件
+### 订阅事件
 
-### 3) 权限（通过 JSON 批量导入）
+| 事件 | 说明 |
+|------|------|
+| `im.message.receive_v1` | 接收消息 v2.0 |
+| `im.chat.access_event.bot_p2p_chat_entered_v1` | 用户进入与机器人会话 |
+| `im.chat.member.bot.added_v1` | 机器人进群 |
 
-- 导入位置：应用配置 -> 开发配置 -> 权限管理 -> 批量导入/导出权限 -> 导入
-- 导入以下 JSON：
+> 推荐使用 **长连接方式** 接收事件。
+
+### 权限配置（JSON 批量导入）
+
+导入位置：**应用配置 → 开发配置 → 权限管理 → 批量导入/导出权限 → 导入**
+
+<details>
+<summary>📋 点击展开权限 JSON</summary>
 
 ```json
 {
@@ -90,22 +125,29 @@ cp .env.example .env
 }
 ```
 
-## 运行
+</details>
 
-```bash
-python main.py
-```
+## 📏 默认查询规则
 
-## 默认查询规则
+| 参数 | 默认值 | 说明 |
+|------|--------|------|
+| 查询窗口 | 7 天 | 从当前时间开始向后查询 |
+| 输出范围 | 工作日 | 仅周一至周五 |
+| 工作时间 | `08:30 - 17:00` | 每日可用时段 |
+| 最小空闲时长 | 15 分钟 | 低于此时长的空闲时段不展示 |
 
-- 查询窗口：从当前时间开始，向后 7 天
-- 输出范围：7 天窗口内的所有工作日（周一到周五）
-- 工作时间：`08:30-17:00`
-- 最小连续空闲时长：15 分钟
-- 输出条数：展示全部符合条件的时段
+> 可在 `bot/config.py` 的 `Settings` 中调整上述参数。
 
-可在 `bot/config.py` 的 `Settings` 中调整。
+## 🧮 算法说明
 
-## 说明
+共同空闲时间 = 工作时间窗口 − 所有参与成员忙碌时间的并集
 
-- 共同空闲时间按“参与成员忙碌时间并集的补集”计算。
+即：先合并所有人的忙碌区间，再取工作时间内的补集，筛选出满足最小时长的空闲段。
+
+## 🤝 参与贡献
+
+欢迎提交 Issue 和 Pull Request！请先阅读 [贡献指南](CONTRIBUTING.md)。
+
+## 📄 许可证
+
+本项目采用 [MIT 许可证](LICENSE) 开源。

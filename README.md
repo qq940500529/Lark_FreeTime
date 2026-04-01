@@ -29,7 +29,12 @@ Lark_FreeTime/
 │   └── scheduler.py        # 共同空闲时间计算
 ├── requirements.txt        # Python 依赖
 ├── .env.example            # 环境变量模板
-└── .gitignore
+├── .gitignore
+├── LICENSE                 # MIT 许可证
+├── README.md               # 项目说明文档
+├── CONTRIBUTING.md         # 贡献指南
+├── CODE_OF_CONDUCT.md      # 行为准则
+└── SECURITY.md             # 安全政策
 ```
 
 ---
@@ -149,7 +154,7 @@ git --version
 **方式一：使用 Homebrew（推荐）**
 
 ```bash
-brew install python@3.10
+brew install python
 ```
 
 安装完成后验证：
@@ -160,7 +165,7 @@ python3 --version
 
 **方式二：使用官方安装包**
 
-1. 前往 [Python 官方下载页](https://www.python.org/downloads/macos/) 下载 macOS 安装包。
+1. 前往 [Python 官方下载页](https://www.python.org/downloads/macos/) 下载最新版 macOS 安装包。
 2. 运行 `.pkg` 安装程序，按照提示完成安装。
 3. 验证安装：
    ```bash

@@ -11,7 +11,7 @@
 ## ✨ 功能特性
 
 - 📩 **消息触发** — 被 @ 时自动接收消息事件
-- ⏳ **即时反馈** — 收到消息先添加 `OneSecond` 表情，处理完成后替换为 `DONE`
+- ⏳ **即时反馈** — 收到消息先添加 <img src="https://sf3-ttcdn-tos.pstatp.com/obj/lark-reaction-cn/emoji_onesecond.png?height=96&amp;lazyload=true&amp;width=108" alt="OneSecond" height="20"> `OneSecond` 表情，处理完成后替换为 <img src="https://sf3-ttcdn-tos.pstatp.com/obj/lark-reaction-cn/emoji_done.png?height=96&amp;lazyload=true&amp;width=96" alt="DONE" height="20"> `DONE`
 - 📅 **日历查询** — 查询消息内被 @ 成员（自动排除机器人）的日历忙碌信息
 - 🧮 **智能计算** — 基于"忙碌时间并集的补集"算法，计算多人共同空闲时段
 - 📊 **美观输出** — 结果以 Markdown 代码块表格形式展示

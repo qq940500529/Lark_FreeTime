@@ -231,8 +231,17 @@ cd Lark_FreeTime
 <summary><b>🪟 Windows</b></summary>
 
 ```bash
+# cmd
 python -m venv venv
 venv\Scripts\activate
+
+# PowerShell
+python -m venv venv
+venv\Scripts\Activate.ps1
+
+# Git Bash
+python -m venv venv
+source venv/Scripts/activate
 ```
 
 激活成功后，命令行前缀会出现 `(venv)` 字样。
